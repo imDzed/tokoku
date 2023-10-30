@@ -1,11 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"tokoku/config"
+)
 
 func main() {
-	fmt.Println("===================================")
-	fmt.Println("\tWelcome TO Tokoku")
-	fmt.Println("===================================")
-	fmt.Println("\tComing soon .. !!!")
-	fmt.Println("===================================")
+	db, err := config.InitDB()
+	if err != nil {
+		fmt.Println(db)
+	}
+
 }
