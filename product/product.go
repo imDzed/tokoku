@@ -15,15 +15,19 @@ type ProductSystem struct {
 
 func (ps *ProductSystem) AddProduct(userName string) (model.Produk, bool) {
 	var newProduct = new(model.Produk)
-	fmt.Println("Masukkan Nama Produk")
-	fmt.Scanln(&newProduct.NamaProduk)
-	fmt.Println("Masukkan Harga Produk")
-	fmt.Scanln(&newProduct.HargaProduk)
-	fmt.Println("Masukkan Deskripsi Produk")
 	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Masukkan Nama Produk: ")
+	scanner.Scan()
+	newProduct.NamaProduk = scanner.Text()
+
+	fmt.Print("Masukkan Harga Produk: ")
+	fmt.Scanln(&newProduct.HargaProduk)
+
+	fmt.Print("Masukkan Deskripsi Produk: ")
 	scanner.Scan()
 	newProduct.Deskripsi = scanner.Text()
-	fmt.Println("Masukkan Stok Produk")
+
+	fmt.Print("Masukkan Stok Produk: ")
 	fmt.Scanln(&newProduct.Stok)
 
 	newProduct.Nama = userName
@@ -35,4 +39,15 @@ func (ps *ProductSystem) AddProduct(userName string) (model.Produk, bool) {
 	}
 
 	return *newProduct, true
+}
+
+func (ps *ProductSystem) ViewAllProducts() ([]model.Produk, error) {
+	var products []model.Produk
+
+	err := ps.DB.Find(&products).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return products, nil
 }

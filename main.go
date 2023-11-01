@@ -23,7 +23,6 @@ func main() {
 
 	for {
 		fmt.Println("1. Login")
-		fmt.Println("2. Register")
 		fmt.Println("99. Exit")
 		fmt.Print("Masukkan Pilihan: ")
 		fmt.Scanln(&inputMenu)
@@ -31,33 +30,114 @@ func main() {
 		case 1:
 			result, permit := auth.Login()
 			if permit {
-				fmt.Println("selamat datang", result.Nama)
-				var pilihmenu int
-				fmt.Println("1. Tambah Barang")
-				fmt.Println("2. edit info barang")
-				fmt.Println("3. update stok barang")
-				fmt.Println("4. tambah daftar customer")
-				fmt.Println("5. buat nota transaksi")
-				fmt.Print("Masukkan Pilihan : ")
-				fmt.Scanln(&pilihmenu)
-				switch pilihmenu {
-				case 1:
-					result, permit := product.AddProduct(result.Nama)
-					if permit {
-						fmt.Println(result)
+				fmt.Println("Selamat Datang ", result.Nama)
+				if result.Role == "" {
+					for permit {
+						fmt.Printf("\n\n\t==============\t\n")
+						fmt.Printf("\t Menu Pegawai\t\n")
+						fmt.Printf("\t==============\t\n\n")
+						fmt.Println("1. Tambah Barang")
+						fmt.Println("2. Lihat Barang")
+						fmt.Println("3. Edit Info Barang")
+						fmt.Println("4. Update Stok Barang")
+						fmt.Println("5. Tambah Daftar Customer")
+						fmt.Println("6. Buat Nota Transaksi")
+						fmt.Println("0. Logout")
+						fmt.Println("99. Exit")
+						fmt.Print("Masukkan Pilihan : ")
+						fmt.Scanln(&inputMenu)
+						switch inputMenu {
+						case 1:
+							result, permit := product.AddProduct(result.Nama)
+							if permit {
+								fmt.Printf("\n%s Telah Berhasil Ditambahkan !!\n", result.NamaProduk)
+							}
+						case 2:
+							products, err := product.ViewAllProducts()
+							if err != nil {
+								fmt.Println("Gagal mengambil produk:", err)
+							} else {
+								fmt.Println("Daftar Produk:")
+								for _, p := range products {
+									fmt.Printf("\nNama Produk: %s\nHarga: %.2f\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
+								}
+							}
+						case 3:
+						case 4:
+						case 5:
+						case 6:
+						case 0:
+							permit = false
+						case 99:
+							fmt.Println("Thank you ....")
+							return
+						}
 					}
-				case 2:
-				case 3:
-				case 4:
-				case 5:
-					return
+				} else if result.Role == "admin" {
+					for permit {
+						fmt.Printf("\n\n\t=============\t\n")
+						fmt.Printf("\t Menu Admin\t\n")
+						fmt.Printf("\t=============\t\n\n")
+						fmt.Println("1. Tambah Pegawai")
+						fmt.Println("2. Lihat Pegawai")
+						fmt.Println("3. Hapus Pegawai")
+						fmt.Println("4. Tambah Barang")
+						fmt.Println("5. Lihat Barang")
+						fmt.Println("6. Edit Info Barang")
+						fmt.Println("7. Update Stok Barang")
+						fmt.Println("8. Hapus Barang")
+						fmt.Println("9. Tambah Daftar Customer")
+						fmt.Println("10. Lihat Daftar Customer")
+						fmt.Println("11. Hapus Customer")
+						fmt.Println("12. Buat Nota Transaksi")
+						fmt.Println("13. Lihat Nota Transaksi")
+						fmt.Println("14. Hapus Nota Transaksi")
+						fmt.Println("0. Logout")
+						fmt.Println("99. Exit")
+						fmt.Print("Masukkan Pilihan : ")
+						fmt.Scanln(&inputMenu)
+						switch inputMenu {
+						case 1:
+							result, permit := auth.Register()
+							if permit {
+								fmt.Println(result)
+							}
+						case 2:
+						case 3:
+						case 4:
+							result, permit := product.AddProduct(result.Nama)
+							if permit {
+								fmt.Printf("\n%s Telah Berhasil Ditambahkan !!\n", result.NamaProduk)
+							}
+						case 5:
+							products, err := product.ViewAllProducts()
+							if err != nil {
+								fmt.Println("Gagal mengambil produk:", err)
+							} else {
+								fmt.Println("Daftar Produk:")
+								for _, p := range products {
+									fmt.Printf("\nNama Produk: %s\nHarga: %.2f\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
+								}
+							}
+						case 6:
+						case 7:
+						case 8:
+						case 9:
+						case 10:
+						case 11:
+						case 12:
+						case 13:
+						case 14:
+						case 0:
+							permit = false
+						case 99:
+							fmt.Println("Thank you ....")
+							return
+						}
+					}
 				}
 			}
-		case 2:
-			result, permit := auth.Register()
-			if permit {
-				fmt.Println(result)
-			}
+
 		case 99:
 			fmt.Println("Thank you ....")
 			return
