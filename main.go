@@ -5,6 +5,7 @@ import (
 	"tokoku/auth"
 	"tokoku/config"
 	"tokoku/model"
+	"tokoku/product"
 )
 
 func main() {
@@ -18,8 +19,9 @@ func main() {
 	db.AutoMigrate(&model.Produk{})
 
 	var auth = auth.AuthSystem{DB: db}
+	var product = product.ProductSystem{DB: db}
 
-	for{
+	for {
 		fmt.Println("1. Login")
 		fmt.Println("2. Register")
 		fmt.Println("99. Exit")
@@ -28,9 +30,9 @@ func main() {
 		switch inputMenu {
 		case 1:
 			result, permit := auth.Login()
-			if permit{
+			if permit {
 				fmt.Println("selamat datang", result.Nama)
-				var pilihmenu int 
+				var pilihmenu int
 				fmt.Println("1. Tambah Barang")
 				fmt.Println("2. edit info barang")
 				fmt.Println("3. update stok barang")
@@ -40,6 +42,10 @@ func main() {
 				fmt.Scanln(&pilihmenu)
 				switch pilihmenu {
 				case 1:
+					result, permit := product.AddProduct(result.Nama)
+					if permit {
+						fmt.Println(result)
+					}
 				case 2:
 				case 3:
 				case 4:
