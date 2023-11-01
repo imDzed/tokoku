@@ -12,31 +12,44 @@ type AuthSystem struct {
 }
 
 func (as *AuthSystem) Register() (model.User, bool) {
-	var addUser = new(model.User)
-
-	fmt.Println("Masukkan nama User: ")
-	fmt.Scanln(&addUser.Nama)
-
-	fmt.Println("Masukkan alamat User: ")
-	fmt.Scanln(&addUser.Alamat)
-
-	fmt.Println("Masukkan gender User (Laki-laki/Perempuan): ")
-	fmt.Scanln(&addUser.Gender)
-
-	fmt.Println("Masukkan username User: ")
-	fmt.Scanln(&addUser.Username)
-
-	fmt.Println("Masukkan password User: ")
-	fmt.Scanln(&addUser.Password)
-
-	fmt.Println("Status akun (true = 1, false = 0)")
-	fmt.Scanln(&addUser.IsAdmin)
-
-	err := as.DB.Create(addUser).Error
+	var newUser = new(model.User)
+	fmt.Print("Masukkan nama: ")
+	fmt.Scanln(&newUser.Nama)
+	fmt.Print("Masukkan Alamat: ")
+	fmt.Scanln(&newUser.Alamat)
+	fmt.Print("masukkan Umur: ")
+	fmt.Scanln(&newUser.Umur)
+	fmt.Print("Masukkan Username: ")
+	fmt.Scanln(&newUser.Username)
+	fmt.Print("Masukkan Password: ")
+	fmt.Scanln(&newUser.Password)
+	fmt.Println("Masukkan Role: ")
+	fmt.Scanln(&newUser.Role)
+	err := as.DB.Create(newUser).Error
 	if err != nil {
-		fmt.Println("Gagal menambahkan User:", err.Error())
+		fmt.Println("input error:", err.Error())
+		return model.User{}, false
+	}
+	return *newUser, true
+}
+
+func (as *AuthSystem) Login() (model.User, bool) {
+
+	var currentUser = new(model.User)
+
+	fmt.Print("Masukkan Username: ")
+	fmt.Scanln(&currentUser.Username)
+	fmt.Print("Masukkan Password: ")
+	fmt.Scanln(&currentUser.Password)
+
+	qry := as.DB.Where("username = ? AND password = ?", currentUser.Username, currentUser.Password).Take(currentUser)
+
+	err := qry.Error
+
+	if err != nil {
+		fmt.Println("login process error:", err.Error())
 		return model.User{}, false
 	}
 
-	return *addUser, true
+	return *currentUser, true
 }
