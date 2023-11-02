@@ -44,20 +44,15 @@ func (cs *CustomerSystem) GetCustomers() ([]model.Customer, error) {
 	return customers, nil
 }
 
-func (cs *CustomerSystem) DeleteCustomer(id int) ([]model.Customer, error) {
-	// Query customer berdasarkan id
-	customer := model.Customer{}
-	err := cs.DB.Where("id = ?", id).First(&customer).Error
-	if err != nil {
-		return nil, err
-	}
+func (cs *CustomerSystem) DeleteCustomer() (model.Customer, bool) {
+	var newCustomer = new(model.Customer)
+	fmt.Print("Hapus User Dengan ID: ")
+	fmt.Scanln(&newCustomer.ID)
 
-	// Hapus customer
-	err = cs.DB.Delete(&customer).Error
+	err := cs.DB.Where("id = ?", newCustomer.ID).Delete(&newCustomer).Error
 	if err != nil {
-		return nil, err
+		fmt.Println("delete error:")
+		return model.Customer{}, false
 	}
-
-	// Kembalikan data customer
-	return cs.GetCustomers()
+	return model.Customer{}, true
 }

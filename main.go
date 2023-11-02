@@ -152,7 +152,7 @@ func main() {
 							} else {
 								fmt.Println("Daftar Produk:")
 								for _, p := range products {
-									fmt.Printf("\nNama Produk: %s\nHarga: %d\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
+									fmt.Printf("\nNama Produk:\t%s\nHarga:\t%d\nDeskripsi:\t%s\nStok:\t%d\nAddBy:\t%s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
 								}
 							}
 						case 6:
@@ -168,22 +168,15 @@ func main() {
 							if err != nil {
 								fmt.Println("Something Wrong", err)
 							} else {
-								fmt.Printf("\tDaftar Customer\t\n")
+								fmt.Printf("\n\tDaftar Customer\t\n")
 								for _, c := range customers {
-									fmt.Printf("\nNama User: %s\nNomor Hp User: %s\nAlamat User: %s", c.Nama, c.Hp, c.Alamat)
+									fmt.Printf("\nId User:\t%d\nNama User:\t%s\nNomor Hp User:\t%s\nAlamat User:\t%s\n", c.ID, c.Nama, c.Hp, c.Alamat)
 								}
 							}
 						case 11:
-							fmt.Println("Masukkan ID customer yang ingin dihapus: ")
-							var id int
-							fmt.Scanln(&id)
-
-							// Hapus customer
-							_, err := customer.DeleteCustomer(id)
-							if err != nil {
-								fmt.Println("Gagal menghapus customer:", err)
-							} else {
-								fmt.Println("Customer berhasil dihapus!")
+							_, permit := customer.DeleteCustomer()
+							if permit {
+								fmt.Printf("\nBerhasil Menghapus Customer\n")
 							}
 						case 12:
 							transaksi, permit := transaksi.AddTransaction(result.Nama)
@@ -195,22 +188,15 @@ func main() {
 							if err != nil {
 								fmt.Println(nota)
 							} else {
-								fmt.Printf("\tDaftar Nota\t\n")
+								fmt.Printf("\n\tDaftar Nota\t\n")
 								for _, n := range nota {
-									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n", n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
+									fmt.Printf("\nNo Invoice:\t%d\nNama Pelanggan:\t%s\nQty Detail:\t%s\nTotal Transaksi:\t%d\nPembuat Nota:\t%s\nTanggal Dibuat:\t%s\n\n", n.ID, n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
 								}
 							}
 						case 14:
-							fmt.Println("Masukkan ID transaksi yang ingin dihapus: ")
-							var id int
-							fmt.Scanln(&id)
-
-							// Hapus transaksi
-							_, err := transaksi.DeleteTransaction(id)
-							if err != nil {
-								fmt.Println("Gagal menghapus transaksi:", err)
-							} else {
-								fmt.Println("Transaksi berhasil dihapus!")
+							_, permit := transaksi.DeleteTransaction()
+							if permit {
+								fmt.Printf("\nBerhasil Menghapus Transaksi\n")
 							}
 						case 0:
 							permit = false
