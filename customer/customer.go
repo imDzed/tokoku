@@ -43,3 +43,21 @@ func (cs *CustomerSystem) GetCustomers() ([]model.Customer, error) {
 	}
 	return customers, nil
 }
+
+func (cs *CustomerSystem) DeleteCustomer(id int) ([]model.Customer, error) {
+	// Query customer berdasarkan id
+	customer := model.Customer{}
+	err := cs.DB.Where("id = ?", id).First(&customer).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// Hapus customer
+	err = cs.DB.Delete(&customer).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// Kembalikan data customer
+	return cs.GetCustomers()
+}
