@@ -190,6 +190,17 @@ func main() {
 								}
 							}
 						case 14:
+							fmt.Println("Masukkan ID transaksi yang ingin dihapus: ")
+							var id int
+							fmt.Scanln(&id)
+
+							// Hapus transaksi
+							_, err := transaksi.DeleteTransaction(id)
+							if err != nil {
+								fmt.Println("Gagal menghapus transaksi:", err)
+							} else {
+								fmt.Println("Transaksi berhasil dihapus!")
+							}
 						case 0:
 							permit = false
 						case 99:
