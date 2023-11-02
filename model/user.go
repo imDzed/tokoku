@@ -6,7 +6,7 @@ type User struct {
 	gorm.Model
 	Nama     string
 	Alamat   string
-	Umur     string
+	Umur     int
 	Gender   string
 	Username string
 	Password string

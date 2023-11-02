@@ -51,3 +51,17 @@ func (ps *ProductSystem) ViewAllProducts() ([]model.Produk, error) {
 
 	return products, nil
 }
+
+
+func (dp *ProductSystem) DeleteProduk() (model.Produk, bool) {
+	var newProduk = new(model.Produk)
+	fmt.Print("Hapus User Dengan ID: ")
+	fmt.Scanln(&newProduk.ID)
+
+	err := dp.DB.Where("id = ?", newProduk.ID).Delete(&newProduk).Error
+	if err != nil {
+		fmt.Println("delete error:")
+		return model.Produk{}, false
+	}
+	return model.Produk{}, true
+}
