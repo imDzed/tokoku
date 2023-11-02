@@ -7,6 +7,7 @@ import (
 	"tokoku/customer"
 	"tokoku/model"
 	"tokoku/product"
+	"tokoku/transaksi"
 )
 
 func main() {
@@ -19,10 +20,12 @@ func main() {
 	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Produk{})
 	db.AutoMigrate(&model.Customer{})
+	db.AutoMigrate(&model.Transaksi{})
 
 	var auth = auth.AuthSystem{DB: db}
 	var product = product.ProductSystem{DB: db}
 	var customer = customer.CustomerSystem{DB: db}
+	var transaksi = transaksi.TransactionSystem{DB: db}
 
 	for {
 		fmt.Println("1. Login")
@@ -44,7 +47,9 @@ func main() {
 						fmt.Println("3. Edit Info Barang")
 						fmt.Println("4. Update Stok Barang")
 						fmt.Println("5. Tambah Daftar Customer")
-						fmt.Println("6. Buat Nota Transaksi")
+						fmt.Println("6. Lihat Daftar Customer")
+						fmt.Println("7. Buat Nota Transaksi")
+						fmt.Println("8. Lihat Nota Transaksi")
 						fmt.Println("0. Logout")
 						fmt.Println("99. Exit")
 						fmt.Print("Masukkan Pilihan : ")
@@ -62,7 +67,7 @@ func main() {
 							} else {
 								fmt.Println("Daftar Produk:")
 								for _, p := range products {
-									fmt.Printf("\nNama Produk: %s\nHarga: %.2f\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
+									fmt.Printf("\nNama Produk: %s\nHarga: %d\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
 								}
 							}
 						case 3:
@@ -73,6 +78,30 @@ func main() {
 								fmt.Printf("\nCustomer %s Telah Berhasil Ditambahkan", result.Nama)
 							}
 						case 6:
+							customers, err := customer.GetCustomers()
+							if err != nil {
+								fmt.Println("Something Wrong", err)
+							} else {
+								fmt.Printf("\tDaftar Customer\t\n")
+								for _, c := range customers {
+									fmt.Printf("\nNama User: %s\nNomor Hp User: %s\nAlamat User: %s", c.Nama, c.Hp, c.Alamat)
+								}
+							}
+						case 7:
+							transaksi, permit := transaksi.AddTransaction(result.Nama)
+							if permit {
+								fmt.Println(transaksi)
+							}
+						case 8:
+							nota, err := transaksi.ViewAllTransaction()
+							if err != nil {
+								fmt.Println(nota)
+							} else {
+								fmt.Printf("\tDaftar Nota\t\n")
+								for _, n := range nota {
+									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n",n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
+								}
+							}
 						case 0:
 							permit = false
 						case 99:
@@ -123,38 +152,30 @@ func main() {
 							} else {
 								fmt.Println("Daftar Produk:")
 								for _, p := range products {
-									fmt.Printf("\nNama Produk: %s\nHarga: %.2f\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
+									fmt.Printf("\nNama Produk: %s\nHarga: %d\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
 								}
 							}
 						case 6:
 						case 7:
 						case 8:
 						case 9:
-							result, permit := customer.AddCustomer()
-							if permit {
-								fmt.Printf("\nCustomer %s Telah Berhasil Ditambahkan", result.Nama)
-							}
 						case 10:
-							customers, err := customer.GetCustomers()
-
-							if err != nil {
-								fmt.Println("Gagal mengambil customer:", err)
-							} else {
-								fmt.Println("\nDaftar Customer:")
-								for _, c := range customers {
-									fmt.Printf("\nNama Customer: %s\nNomor HP: %s\nAlamat: %s\n\n", c.Nama, c.Hp, c.Alamat)
-								}
-							}
-							fmt.Println("Kembali ke menu sebelumnya? (y/n)")
-							var back string
-							fmt.Scanln(&back)
-
-							if back == "y" {
-								inputMenu = 0
-							}
 						case 11:
 						case 12:
+							transaksi, permit := transaksi.AddTransaction(result.Nama)
+							if permit {
+								fmt.Println(transaksi)
+							}
 						case 13:
+							nota, err := transaksi.ViewAllTransaction()
+							if err != nil {
+								fmt.Println(nota)
+							} else {
+								fmt.Printf("\tDaftar Nota\t\n")
+								for _, n := range nota {
+									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n",n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
+								}
+							}
 						case 14:
 						case 0:
 							permit = false
