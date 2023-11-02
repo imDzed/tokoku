@@ -70,7 +70,7 @@ func main() {
 						case 5:
 							result, permit := customer.AddCustomer()
 							if permit {
-								fmt.Printf(result.Nama, "\n%s Telah Berhasil Ditambahkan !!\n")
+								fmt.Printf("\nCustomer %s Telah Berhasil Ditambahkan", result.Nama)
 							}
 						case 6:
 						case 0:
@@ -130,16 +130,9 @@ func main() {
 						case 7:
 						case 8:
 						case 9:
-							_, permit := customer.AddCustomer()
+							result, permit := customer.AddCustomer()
 							if permit {
-								fmt.Printf("\n Customer Berhasil Ditambahkan !!\n")
-							}
-							fmt.Println("Kembali ke menu sebelumnya? (y/n)")
-							var back string
-							fmt.Scanln(&back)
-
-							if back == "y" {
-								inputMenu = 0
+								fmt.Printf("\nCustomer %s Telah Berhasil Ditambahkan", result.Nama)
 							}
 						case 10:
 							customers, err := customer.GetCustomers()
