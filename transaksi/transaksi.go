@@ -95,3 +95,21 @@ func (vs *TransactionSystem) ViewAllTransaction() ([]model.Transaksi, error) {
 
 	return transactions, nil
 }
+
+func (vs *TransactionSystem) DeleteTransaction(id int) ([]model.Transaksi, error) {
+	// Query transaksi berdasarkan id
+	transaksi := model.Transaksi{}
+	err := vs.DB.Where("id = ?", id).First(&transaksi).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// Hapus transaksi
+	err = vs.DB.Delete(&transaksi).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// Kembalikan data transaksi
+	return vs.ViewAllTransaction()
+}
