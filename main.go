@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"tokoku/auth"
 	"tokoku/config"
+	"tokoku/customer"
 	"tokoku/model"
 	"tokoku/product"
 )
@@ -17,9 +18,11 @@ func main() {
 
 	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Produk{})
+	db.AutoMigrate(&model.Customer{})
 
 	var auth = auth.AuthSystem{DB: db}
 	var product = product.ProductSystem{DB: db}
+	var customer = customer.CustomerSystem{DB: db}
 
 	for {
 		fmt.Println("1. Login")
@@ -65,6 +68,10 @@ func main() {
 						case 3:
 						case 4:
 						case 5:
+							result, permit := customer.AddCustomer()
+							if permit {
+								fmt.Printf("\nCustomer %s Telah Berhasil Ditambahkan", result.Nama)
+							}
 						case 6:
 						case 0:
 							permit = false
@@ -123,7 +130,28 @@ func main() {
 						case 7:
 						case 8:
 						case 9:
+							result, permit := customer.AddCustomer()
+							if permit {
+								fmt.Printf("\nCustomer %s Telah Berhasil Ditambahkan", result.Nama)
+							}
 						case 10:
+							customers, err := customer.GetCustomers()
+
+							if err != nil {
+								fmt.Println("Gagal mengambil customer:", err)
+							} else {
+								fmt.Println("\nDaftar Customer:")
+								for _, c := range customers {
+									fmt.Printf("\nNama Customer: %s\nNomor HP: %s\nAlamat: %s\n\n", c.Nama, c.Hp, c.Alamat)
+								}
+							}
+							fmt.Println("Kembali ke menu sebelumnya? (y/n)")
+							var back string
+							fmt.Scanln(&back)
+
+							if back == "y" {
+								inputMenu = 0
+							}
 						case 11:
 						case 12:
 						case 13:
