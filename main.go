@@ -174,6 +174,17 @@ func main() {
 								}
 							}
 						case 11:
+							fmt.Println("Masukkan ID customer yang ingin dihapus: ")
+							var id int
+							fmt.Scanln(&id)
+
+							// Hapus customer
+							_, err := customer.DeleteCustomer(id)
+							if err != nil {
+								fmt.Println("Gagal menghapus customer:", err)
+							} else {
+								fmt.Println("Customer berhasil dihapus!")
+							}
 						case 12:
 							transaksi, permit := transaksi.AddTransaction(result.Nama)
 							if permit {
