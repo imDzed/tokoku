@@ -42,10 +42,10 @@ func main() {
 						fmt.Printf("\n\n\t==============\t\n")
 						fmt.Printf("\t Menu Pegawai\t\n")
 						fmt.Printf("\t==============\t\n\n")
-						fmt.Println("1. Tambah Barang")
-						fmt.Println("2. Lihat Barang")
-						fmt.Println("3. Edit Info Barang")
-						fmt.Println("4. Update Stok Barang")
+						fmt.Println("1. Tambah Produk")
+						fmt.Println("2. Lihat Produk")
+						fmt.Println("3. Edit Info Produk")
+						fmt.Println("4. Update Stok Produk")
 						fmt.Println("5. Tambah Daftar Customer")
 						fmt.Println("6. Lihat Daftar Customer")
 						fmt.Println("7. Buat Nota Transaksi")
@@ -117,11 +117,11 @@ func main() {
 						fmt.Println("1. Tambah Pegawai")
 						fmt.Println("2. Lihat Pegawai")
 						fmt.Println("3. Hapus Pegawai")
-						fmt.Println("4. Tambah Barang")
-						fmt.Println("5. Lihat Barang")
-						fmt.Println("6. Edit Info Barang")
-						fmt.Println("7. Update Stok Barang")
-						fmt.Println("8. Hapus Barang")
+						fmt.Println("4. Tambah Produk")
+						fmt.Println("5. Lihat Produk")
+						fmt.Println("6. Edit Info Produk")
+						fmt.Println("7. Update Stok Produk")
+						fmt.Println("8. Hapus Produk")
 						fmt.Println("9. Tambah Daftar Customer")
 						fmt.Println("10. Lihat Daftar Customer")
 						fmt.Println("11. Hapus Customer")
@@ -134,12 +134,27 @@ func main() {
 						fmt.Scanln(&inputMenu)
 						switch inputMenu {
 						case 1:
-							result, permit := auth.Register()
+							pegawai, permit := auth.Register()
 							if permit {
-								fmt.Println(result)
+								fmt.Printf("Pegawai Dengan Nama %s Berhasil Ditambah", pegawai.Nama)
 							}
 						case 2:
+							employees, err := auth.ViewPegawai()
+							if err != nil {
+								fmt.Println("Gagal mengambil data pegawai:", err.Error())
+							} else {
+								fmt.Printf("\n\tDaftar Pegawai\t\n")
+								for _, employee := range employees {
+									fmt.Printf("\nID: %d\nNama: %s\nAlamat: %s\nUmur: %d\nUsername: %s\nPassword: %s\nRole: %s\n",
+										employee.ID, employee.Nama, employee.Alamat, employee.Umur, employee.Username, employee.Password, employee.Role)
+								}
+							}
+
 						case 3:
+							_, permit := auth.DeletePegawai()
+							if permit {
+								fmt.Printf("\nBerhasil Menghapus Pegawai\n")
+							}
 						case 4:
 							result, permit := product.AddProduct(result.Nama)
 							if permit {
@@ -150,14 +165,20 @@ func main() {
 							if err != nil {
 								fmt.Println("Gagal mengambil produk:", err)
 							} else {
-								fmt.Println("Daftar Produk:")
+								fmt.Printf("\n\tDaftar Produk\t\n")
 								for _, p := range products {
-									fmt.Printf("\nNama Produk:\t%s\nHarga:\t%d\nDeskripsi:\t%s\nStok:\t%d\nAddBy:\t%s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
+									fmt.Printf("\nID Produk: %d\nNama Produk: %s\nHarga: %d\nDeskripsi: %s\nStok: %d\nAddBy: %s\n", p.ID, p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
 								}
 							}
 						case 6:
+
 						case 7:
+
 						case 8:
+							_, permit := product.DeleteProduk()
+							if permit {
+								fmt.Printf("\nBerhasil Menghapus Produk\n")
+							}
 						case 9:
 							result, permit := customer.AddCustomer()
 							if permit {
