@@ -99,7 +99,7 @@ func main() {
 							} else {
 								fmt.Printf("\tDaftar Nota\t\n")
 								for _, n := range nota {
-									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n",n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
+									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n", n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
 								}
 							}
 						case 0:
@@ -159,7 +159,20 @@ func main() {
 						case 7:
 						case 8:
 						case 9:
+							result, permit := customer.AddCustomer()
+							if permit {
+								fmt.Printf("\nCustomer %s Telah Berhasil Ditambahkan", result.Nama)
+							}
 						case 10:
+							customers, err := customer.GetCustomers()
+							if err != nil {
+								fmt.Println("Something Wrong", err)
+							} else {
+								fmt.Printf("\tDaftar Customer\t\n")
+								for _, c := range customers {
+									fmt.Printf("\nNama User: %s\nNomor Hp User: %s\nAlamat User: %s", c.Nama, c.Hp, c.Alamat)
+								}
+							}
 						case 11:
 						case 12:
 							transaksi, permit := transaksi.AddTransaction(result.Nama)
@@ -173,7 +186,7 @@ func main() {
 							} else {
 								fmt.Printf("\tDaftar Nota\t\n")
 								for _, n := range nota {
-									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n",n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
+									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n", n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
 								}
 							}
 						case 14:
