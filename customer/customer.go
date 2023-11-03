@@ -54,5 +54,5 @@ func (cs *CustomerSystem) DeleteCustomer() (model.Customer, bool) {
 		fmt.Println("delete error:")
 		return model.Customer{}, false
 	}
-	return model.Customer{}, true
+	return model.Customer{}, true 
 }
