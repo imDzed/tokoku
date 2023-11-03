@@ -153,10 +153,10 @@ func (ts *TransactionSystem) UpdateTransaction() (model.Transaksi, bool) {
 			return updatedTransaksi, false
 		}
 
-		// stokChange := productQuantities[productID] - quantity
-		// product.Stok += stokChange
+		stokChange := productQuantities[productID] - quantity
+		product.Stok += stokChange
 
-		// productQuantities[productID] = quantity
+		productQuantities[productID] = quantity
 		product.Stok -= quantity
 		ts.DB.Save(&product)
 	}
