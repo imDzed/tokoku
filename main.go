@@ -67,7 +67,7 @@ func main() {
 							} else {
 								fmt.Println("Daftar Produk:")
 								for _, p := range products {
-									fmt.Printf("\nNama Produk: %s\nHarga: %d\nDeskripsi: %s\nStok: %d\nAddBy: %s\n\n", p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
+									fmt.Printf("\nID Produk: %d\nNama Produk: %s\nHarga: %d\nDeskripsi: %s\nStok: %d\nAddBy: %s\n", p.ID, p.NamaProduk, p.HargaProduk, p.Deskripsi, p.Stok, p.Nama)
 								}
 							}
 						case 3:
@@ -93,7 +93,7 @@ func main() {
 							} else {
 								fmt.Printf("\tDaftar Customer\t\n")
 								for _, c := range customers {
-									fmt.Printf("\nNama User: %s\nNomor Hp User: %s\nAlamat User: %s", c.Nama, c.Hp, c.Alamat)
+									fmt.Printf("\nID Customer: %d\nNama User: %s\nNomor Hp User: %s\nAlamat User: %s\n", c.ID, c.Nama, c.Hp, c.Alamat)
 								}
 							}
 						case 7:
@@ -108,7 +108,7 @@ func main() {
 							} else {
 								fmt.Printf("\tDaftar Nota\t\n")
 								for _, n := range nota {
-									fmt.Printf("\nNama Pelanggan: %s\nQty Detail: %s\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n", n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
+									fmt.Printf("\nID Nota: %d\nNama Pelanggan: %s\nNama Produk: %s\nQty : %d\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n",n.ID, n.NamaPelanggan, n.NamaProduk, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt.Format("2 January 2006, 15:04"))
 								}
 							}
 						case 0:
@@ -137,6 +137,7 @@ func main() {
 						fmt.Println("12. Buat Nota Transaksi")
 						fmt.Println("13. Lihat Nota Transaksi")
 						fmt.Println("14. Hapus Nota Transaksi")
+						fmt.Println("15. Update Nota Transaksi")
 						fmt.Println("0. Logout")
 						fmt.Println("99. Exit")
 						fmt.Print("Masukkan Pilihan : ")
@@ -228,13 +229,18 @@ func main() {
 							} else {
 								fmt.Printf("\n\tDaftar Nota\t\n")
 								for _, n := range nota {
-									fmt.Printf("\nNo Invoice:\t%d\nNama Pelanggan:\t%s\nQty Detail:\t%s\nTotal Transaksi:\t%d\nPembuat Nota:\t%s\nTanggal Dibuat:\t%s\n\n", n.ID, n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt)
+									fmt.Printf("\nNo Nota: %d\nNama Pelanggan: %s\nQty Detail: %d\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n", n.ID, n.NamaPelanggan, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt.Format("2 January 2006, 15:04"))
 								}
 							}
 						case 14:
 							_, permit := transaksi.DeleteTransaction()
 							if permit {
 								fmt.Printf("\nBerhasil Menghapus Transaksi\n")
+							}
+						case 15:
+							_, permit := transaksi.UpdateTransaction()
+							if permit {
+								fmt.Println("Transaksi Berhasil Di Update")
 							}
 						case 0:
 							permit = false
