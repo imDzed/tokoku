@@ -44,7 +44,7 @@ func (ts *TransactionSystem) AddTransaction(userName string) (model.Transaksi, b
 		var product model.Produk
 		if err := ts.DB.First(&product, productID).Error; err != nil {
 			fmt.Println("Produk tidak ditemukan.")
-			continue
+			return transaction, false
 		}
 
 		fmt.Print("Masukkan Jumlah: ")
@@ -54,7 +54,7 @@ func (ts *TransactionSystem) AddTransaction(userName string) (model.Transaksi, b
 
 		if product.Stok < quantity {
 			fmt.Println("Stok produk tidak mencukupi.")
-			continue
+			return transaction, false
 		}
 		product.Stok -= quantity
 		ts.DB.Save(&product)
