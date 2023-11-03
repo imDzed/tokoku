@@ -5,7 +5,8 @@ import "gorm.io/gorm"
 type Transaksi struct {
 	gorm.Model
 	NamaPelanggan  string
-	Qty            string
+	NamaProduk     string
+	Qty            int
 	TotalTransaksi int
 	PembuatNota    string
 }
