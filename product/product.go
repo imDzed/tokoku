@@ -65,3 +65,91 @@ func (dp *ProductSystem) DeleteProduk() (model.Produk, bool) {
 	}
 	return model.Produk{}, true
 }
+
+
+
+
+func (ps *ProductSystem) EditProduct() (model.Produk, bool) {
+    var editedProduct model.Produk
+	scanner := bufio.NewScanner(os.Stdin)
+
+    fmt.Print("Masukkan ID Produk yang akan diedit: ")
+    var productID uint
+    fmt.Scanln(&productID)
+
+    err := ps.DB.Where("id = ?", productID).First(&editedProduct).Error
+    if err != nil {
+        fmt.Println("Produk tidak ditemukan:", err.Error())
+        return model.Produk{}, false
+    }
+
+    var userInput string
+
+    fmt.Printf("Nama Produk (sebelumnya: %s): ", editedProduct.NamaProduk)
+	if userInput != "" {
+        editedProduct.NamaProduk = userInput
+    }
+	scanner.Scan()
+	editedProduct.NamaProduk = scanner.Text()
+    
+
+    fmt.Printf("Harga Produk (sebelumnya: %d): ", editedProduct.HargaProduk)
+    fmt.Scanln(&userInput)
+    if userInput != "" {
+        fmt.Sscan(userInput, &editedProduct.HargaProduk)
+    }
+
+    fmt.Printf("Deskripsi Produk (sebelumnya: %s): ", editedProduct.Deskripsi)
+	if userInput != "" {
+        editedProduct.Deskripsi = userInput
+    }
+	scanner.Scan()
+	editedProduct.Deskripsi = scanner.Text()
+    
+
+    fmt.Printf("Stok Produk (sebelumnya: %d): ", editedProduct.Stok)
+    fmt.Scanln(&userInput)
+    if userInput != "" {
+        fmt.Sscan(userInput, &editedProduct.Stok)
+    }
+
+    err = ps.DB.Save(&editedProduct).Error
+    if err != nil {
+        fmt.Println("Gagal menyimpan perubahan:", err.Error())
+        return model.Produk{}, false
+    }
+
+    return editedProduct, true
+}
+
+
+func (ps *ProductSystem) EditStokProduct() (model.Produk, bool) {
+	var editStokProduct model.Produk
+
+	fmt.Print("Masukkan ID Produk yang akan diedit: ")
+    var productID uint
+    fmt.Scanln(&productID)
+
+    err := ps.DB.Where("id = ?", productID).First(&editStokProduct).Error
+    if err != nil {
+        fmt.Println("Produk tidak ditemukan:", err.Error())
+        return model.Produk{}, false
+    }
+
+    var userInput string
+
+	fmt.Printf("Stok Produk (sebelumnya: %d): ", editStokProduct.Stok)
+    fmt.Scanln(&userInput)
+    if userInput != "" {
+        fmt.Sscan(userInput, &editStokProduct.Stok)
+    }
+
+    err = ps.DB.Save(&editStokProduct).Error
+    if err != nil {
+        fmt.Println("Gagal menyimpan perubahan:", err.Error())
+        return model.Produk{}, false
+    }
+
+    return editStokProduct, true
+
+}

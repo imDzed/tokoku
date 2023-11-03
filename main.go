@@ -71,7 +71,16 @@ func main() {
 								}
 							}
 						case 3:
+							_, permit := product.EditProduct()
+							if permit {
+								fmt.Println("Produk Berhasil Di Update")
+							}
+							
 						case 4:
+							_, permit := product.EditStokProduct()
+							if permit {
+								fmt.Println("Stok Produk Berhasil Di Update")
+							}
 						case 5:
 							result, permit := customer.AddCustomer()
 							if permit {
@@ -171,8 +180,16 @@ func main() {
 								}
 							}
 						case 6:
+							_, permit := product.EditProduct()
+							if permit {
+								fmt.Println("Produk Berhasil Di Update")
+							}
 
 						case 7:
+							_, permit := product.EditStokProduct()
+							if permit {
+								fmt.Println("Stok Produk Berhasil Di Update")
+							}
 
 						case 8:
 							_, permit := product.DeleteProduk()
@@ -197,8 +214,8 @@ func main() {
 						case 11:
 							_, permit := customer.DeleteCustomer()
 							if permit {
-								fmt.Printf("\nBerhasil Menghapus Customer\n")
-							}
+								fmt.Printf("\n\tCustomer Berhasil Dihapus\t\n")
+							} 
 						case 12:
 							transaksi, permit := transaksi.AddTransaction(result.Nama)
 							if permit {
