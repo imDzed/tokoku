@@ -37,7 +37,7 @@ func main() {
 			result, permit := auth.Login()
 			if permit {
 				fmt.Println("Selamat Datang ", result.Nama)
-				if result.Role == "" {
+				if result.Role == "pegawai" {
 					for permit {
 						fmt.Printf("\n\n\t==============\t\n")
 						fmt.Printf("\t Menu Pegawai\t\n")
@@ -75,7 +75,7 @@ func main() {
 							if permit {
 								fmt.Println("Produk Berhasil Di Update")
 							}
-							
+
 						case 4:
 							_, permit := product.EditStokProduct()
 							if permit {
@@ -216,7 +216,7 @@ func main() {
 							_, permit := customer.DeleteCustomer()
 							if permit {
 								fmt.Printf("\n\tCustomer Berhasil Dihapus\t\n")
-							} 
+							}
 						case 12:
 							transaksi, permit := transaksi.AddTransaction(result.Nama)
 							if permit {
