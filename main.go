@@ -37,7 +37,7 @@ func main() {
 			result, permit := auth.Login()
 			if permit {
 				fmt.Println("Selamat Datang ", result.Nama)
-				if result.Role == "" {
+				if result.Role == "pegawai" {
 					for permit {
 						fmt.Printf("\n\n\t==============\t\n")
 						fmt.Printf("\t Menu Pegawai\t\n")
