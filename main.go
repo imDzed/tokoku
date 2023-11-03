@@ -108,7 +108,7 @@ func main() {
 							} else {
 								fmt.Printf("\tDaftar Nota\t\n")
 								for _, n := range nota {
-									fmt.Printf("\nID Nota: %d\nNama Pelanggan: %s\nNama Produk: %s\nQty : %d\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n",n.ID, n.NamaPelanggan, n.NamaProduk, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt.Format("2 January 2006, 15:04"))
+									fmt.Printf("\nID Nota: %d\nNama Pelanggan: %s\nNama Produk: %s\nQty : %d\nTotal Transaksi: %d\nPembuat Nota: %s\nTanggal Dibuat: %s\n\n", n.ID, n.NamaPelanggan, n.NamaProduk, n.Qty, n.TotalTransaksi, n.PembuatNota, n.CreatedAt.Format("2 January 2006, 15:04"))
 								}
 							}
 						case 0:
