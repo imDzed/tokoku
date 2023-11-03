@@ -61,6 +61,7 @@ func (ts *TransactionSystem) AddTransaction(userName string) (model.Transaksi, b
 	}
 
 	total := 0
+	totalqty := 0
 	qtyItems := []string{}
 	for productID, quantity := range productQuantities {
 		var product model.Produk
@@ -69,10 +70,12 @@ func (ts *TransactionSystem) AddTransaction(userName string) (model.Transaksi, b
 			return model.Transaksi{}, false
 		}
 		total += product.HargaProduk * quantity
-		qtyItems = append(qtyItems, fmt.Sprintf("%s: %d", product.NamaProduk, quantity))
+		qtyItems = append(qtyItems, fmt.Sprintf("\n\t\t%s: %d", product.NamaProduk, quantity))
+		totalqty += quantity
 	}
 	transaction.TotalTransaksi = total
-	transaction.Qty = strings.Join(qtyItems, ", ")
+	transaction.NamaProduk = strings.Join(qtyItems, "")
+	transaction.Qty = totalqty
 
 	transaction.PembuatNota = userName
 
@@ -107,4 +110,79 @@ func (vs *TransactionSystem) DeleteTransaction() (model.Transaksi, bool) {
 		return model.Transaksi{}, false
 	}
 	return model.Transaksi{}, true
+}
+
+func (ts *TransactionSystem) UpdateTransaction() (model.Transaksi, bool) {
+	var updatedTransaksi model.Transaksi
+
+	fmt.Print("Masukkan ID Transaksi yang akan diperbarui: ")
+	var transaksiID uint
+	fmt.Scanln(&transaksiID)
+
+	err := ts.DB.Where("id = ?", transaksiID).First(&updatedTransaksi).Error
+	if err != nil {
+		fmt.Println("Transaksi tidak ditemukan:", err.Error())
+		return model.Transaksi{}, false
+	}
+
+	productQuantities := make(map[uint]int)
+
+	fmt.Println("Masukkan produk dalam transaksi (0 untuk selesai):")
+	for {
+		var productID uint
+		var quantity int
+
+		fmt.Print("Masukkan ID Produk (0 untuk selesai): ")
+		fmt.Scanln(&productID)
+
+		if productID == 0 {
+			break
+		}
+
+		var product model.Produk
+		if err := ts.DB.First(&product, productID).Error; err != nil {
+			fmt.Println("Produk tidak ditemukan.")
+			return updatedTransaksi, false
+		}
+
+		fmt.Printf("Masukkan Jumlah produk %s : ", product.NamaProduk)
+		fmt.Scanln(&quantity)
+
+		if product.Stok < quantity {
+			fmt.Println("Stok produk tidak mencukupi.")
+			return updatedTransaksi, false
+		}
+
+		// stokChange := productQuantities[productID] - quantity
+		// product.Stok += stokChange
+
+		// productQuantities[productID] = quantity
+		product.Stok -= quantity
+		ts.DB.Save(&product)
+	}
+
+	total := 0
+	totalqty := 0
+	qtyItems := []string{}
+	for productID, quantity := range productQuantities {
+		var product model.Produk
+		if err := ts.DB.First(&product, productID).Error; err != nil {
+			fmt.Println("Produk tidak ditemukan.")
+			return model.Transaksi{}, false
+		}
+		total += product.HargaProduk * quantity
+		qtyItems = append(qtyItems, fmt.Sprintf("\n\t\t%s: %d", product.NamaProduk, quantity))
+		totalqty += quantity
+	}
+	updatedTransaksi.TotalTransaksi = total
+	updatedTransaksi.NamaProduk = strings.Join(qtyItems, "")
+	updatedTransaksi.Qty = totalqty
+
+	if err := ts.DB.Save(&updatedTransaksi).Error; err != nil {
+		fmt.Println("Gagal menyimpan perubahan:", err.Error())
+		return model.Transaksi{}, false
+	}
+
+	fmt.Println("Transaksi berhasil diperbarui.")
+	return updatedTransaksi, true
 }

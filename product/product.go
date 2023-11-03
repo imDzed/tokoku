@@ -71,7 +71,6 @@ func (dp *ProductSystem) DeleteProduk() (model.Produk, bool) {
 
 func (ps *ProductSystem) EditProduct() (model.Produk, bool) {
     var editedProduct model.Produk
-	scanner := bufio.NewScanner(os.Stdin)
 
     fmt.Print("Masukkan ID Produk yang akan diedit: ")
     var productID uint
@@ -83,14 +82,15 @@ func (ps *ProductSystem) EditProduct() (model.Produk, bool) {
         return model.Produk{}, false
     }
 
-    var userInput string
+	var userInput string
+    scanner := bufio.NewScanner(os.Stdin)
 
     fmt.Printf("Nama Produk (sebelumnya: %s): ", editedProduct.NamaProduk)
-	if userInput != "" {
+	scanner.Scan()
+    userInput = scanner.Text()
+    if userInput != "" {
         editedProduct.NamaProduk = userInput
     }
-	scanner.Scan()
-	editedProduct.NamaProduk = scanner.Text()
     
 
     fmt.Printf("Harga Produk (sebelumnya: %d): ", editedProduct.HargaProduk)
@@ -100,18 +100,12 @@ func (ps *ProductSystem) EditProduct() (model.Produk, bool) {
     }
 
     fmt.Printf("Deskripsi Produk (sebelumnya: %s): ", editedProduct.Deskripsi)
-	if userInput != "" {
+	scanner.Scan()
+    userInput = scanner.Text()
+    if userInput != "" {
         editedProduct.Deskripsi = userInput
     }
-	scanner.Scan()
-	editedProduct.Deskripsi = scanner.Text()
     
-
-    fmt.Printf("Stok Produk (sebelumnya: %d): ", editedProduct.Stok)
-    fmt.Scanln(&userInput)
-    if userInput != "" {
-        fmt.Sscan(userInput, &editedProduct.Stok)
-    }
 
     err = ps.DB.Save(&editedProduct).Error
     if err != nil {
